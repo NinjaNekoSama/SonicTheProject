@@ -1,2 +1,3 @@
-# Sonic The Project not the Hedgehog 
-My domination now with Sine waves 💅🏽
+# Sonic The Project (not the Hedgehog)
+
+A project with aspirations in visualizing sound as we percieve it and much more! 
