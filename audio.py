@@ -1,12 +1,8 @@
 import pyaudio
 import struct
-import matplotlib.pyplot as plt
-import matplotlib
 import logging
 import time
 
-matplotlib.use('Qt5Agg', force=True)
-plt.style.use('dark_background')
 
 
 class LiveAudio:
