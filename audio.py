@@ -1,39 +1,49 @@
 import pyaudio
 import struct
-import numpy as np
-import matplotlib.pyplot as plt
-import matplotlib
-import PyQt5
-matplotlib.use('Qt5Agg',force=True)
-plt.style.use('dark_background')
+import logging
+import time
 
-CHUNK = 1024 * 2
-FORMAT = pyaudio.paInt16
-CHANNELS = 1
-RATE = 44100
-p = pyaudio.PyAudio()
-stream = p.open(
-    format=FORMAT,
-    channels=CHANNELS,
-    rate=RATE,
-    input=True,
-    output=True,
-    frames_per_buffer=CHUNK
-)
-fig,ax = plt.subplots()
-x = np.arange(0,2*CHUNK,2)
-line, = ax.plot(x, np.random.rand(CHUNK),'r')
-ax.set_ylim(-32770,32770)
-ax.set_xlim = (0,CHUNK)
-ax.set_title('Waveform')
-ax.set_xlabel('Time')
-ax.set_ylabel('Amplitude')
-fig.show()
-while 1:
-    data = stream.read(CHUNK)
-    dataInt = struct.unpack(str(CHUNK) + 'h', data)
-    line.set_ydata(dataInt)
-    ax.draw_artist(ax.patch)
-    ax.draw_artist(line)
-    fig.canvas.update()
-    fig.canvas.flush_events()
+
+
+class LiveAudio:
+    CHUNK = 1024 * 2
+    FORMAT = pyaudio.paInt16
+    CHANNELS = 1
+    RATE = 44100
+
+    def __init__(self):
+        self.RECORD = True
+        self.audio_object = pyaudio.PyAudio()
+        self.stream = None
+
+    def initialize_stream(self):
+        if self.stream:
+            logging.info("Stream already initialized")
+            return
+        self.stream = self.audio_object.open(
+            format=pyaudio.paInt16,
+            channels=1,
+            rate=44100,
+            input=True,
+            output=True,
+            frames_per_buffer=1024
+        )
+
+    def __del__(self):
+        logging.info("Closed stream object successfully")
+        self.audio_object.terminate()
+        self.stream.stop_stream()
+        self.stream.close()
+
+    def start_recording(self):
+        self.RECORD = True
+        self.initialize_stream()
+        logging.info('Recording in progress.....')
+        while self.RECORD:
+            data = self.stream.read(self.CHUNK)
+            data = struct.unpack(str(self.CHUNK) + 'h', data)
+            yield {'data': data, 'time': time.time()}
+
+    def stop_recording(self, stop_condition=False):
+        logging.info('Stopping recording.....')
+        self.RECORD = stop_condition

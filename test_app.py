@@ -1,11 +1,10 @@
 import pytest
-from app import app
+from audio import LiveAudio
+import time
 
-@pytest.fixture
-def client():
-    with app.test_client() as client:
-        yield client
 
-def test_hello_world(client):
-    response = client.get('/')
-    assert b'Hello, World!' in response.data
+def test_start_recording():
+    audio = LiveAudio()
+    start = time.time()
+    duration = 0.1
+    assert audio.RECORD == True
