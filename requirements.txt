@@ -4,6 +4,8 @@
 #
 #    pip-compile
 #
+bidict==0.22.1
+    # via python-socketio
 blinker==1.7.0
     # via flask
 click==8.1.7
@@ -13,9 +15,15 @@ contourpy==1.2.0
 cycler==0.12.1
     # via matplotlib
 flask==3.0.0
+    # via
+    #   -r requirements.in
+    #   flask-socketio
+flask-socketio==5.3.6
     # via -r requirements.in
 fonttools==4.47.0
     # via matplotlib
+h11==0.14.0
+    # via wsproto
 itsdangerous==2.1.2
     # via flask
 jinja2==3.1.2
@@ -49,7 +57,15 @@ pyqt5-sip==12.13.0
     # via pyqt5
 python-dateutil==2.8.2
     # via matplotlib
+python-engineio==4.8.0
+    # via python-socketio
+python-socketio==5.10.0
+    # via flask-socketio
+simple-websocket==1.0.0
+    # via python-engineio
 six==1.16.0
     # via python-dateutil
 werkzeug==3.0.1
     # via flask
+wsproto==1.2.0
+    # via simple-websocket
