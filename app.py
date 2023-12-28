@@ -1,10 +1,13 @@
+import os
 from flask import Flask, render_template
 from flask_socketio import SocketIO
 from audio import LiveAudio
+from dotenv import load_dotenv
 import logging
 
+load_dotenv()
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'nani'
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 app.config['DEBUG'] = True
 socketio = SocketIO(app)
 
