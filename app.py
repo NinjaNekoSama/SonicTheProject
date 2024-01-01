@@ -37,10 +37,12 @@ def start_streaming():
     for data in mic_feed.start_recording():
         socketio.emit('stream_data', data)
 
+
 @socketio.on('stop_streaming')
 def stop_streaming():
     logging.warning('Streaming stopped')
     mic_feed.stop_recording()
+    socketio.emit('stream_data', {'data': 'Streaming stopped'})
 
 
 if __name__ == '__main__':
