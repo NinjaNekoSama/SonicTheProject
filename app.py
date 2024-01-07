@@ -9,7 +9,6 @@ import logging
 load_dotenv()
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
-app.config['DEBUG'] = True
 socketio = SocketIO(app)
 
 mic_feed = LiveAudio()
