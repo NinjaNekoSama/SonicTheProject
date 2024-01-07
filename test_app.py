@@ -1,6 +1,6 @@
 import pytest
 import time
-from audio import midi_pitch, get_note,
+from audio import midi_pitch, get_note
 import numpy as np
 from app import app, mic_feed
 
