@@ -84,7 +84,7 @@ class LiveAudio:
             data = self.stream.read(self.CHUNK)
             signal = np.fromstring(data, dtype=np.float32)
             self.rms = np.sqrt((signal ** 2).sum() / len(data))
-            db = (20 * np.log10(self.rms)) + 50
+            db = (20 * np.log10(self.rms)) + 75
             data = signal.astype(str)
             pitch = pitch_o(signal)[0]
             midi_value = midi_pitch(pitch)

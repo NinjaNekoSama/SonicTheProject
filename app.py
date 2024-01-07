@@ -1,9 +1,10 @@
 import os
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from flask_socketio import SocketIO
 from audio import LiveAudio
 from dotenv import load_dotenv
 import logging
+
 
 load_dotenv()
 app = Flask(__name__)
@@ -43,6 +44,12 @@ def stop_streaming():
     logging.warning('Streaming stopped')
     mic_feed.stop_recording()
     socketio.emit('stream_data', {'data': 'Streaming stopped'})
+
+
+@app.route('/stft', methods=['GET', 'POST'])
+def stft_endpoint():
+    if request.method == 'GET':
+        return render_template('spectrum.html')
 
 
 if __name__ == '__main__':
