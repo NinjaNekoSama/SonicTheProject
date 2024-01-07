@@ -3,10 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Audio Streaming</title>
+    <title>SonicTheProject</title>
 </head>
 <body>
     <h1>Audio Streaming</h1>
+    <style>
+        h1 {
+            font-family: 'ＭＳ Ｐゴシック';  /* Use an 8-bit-style font */
+            text-align: right;
+            margin-top: 10px;
+            color: #000; /* Fallback for older browsers */
+            color: rgba(0, 0, 0, 0.5);
+            font-size: 30pt;
+}
+    </style>
     <button id="startButton">Start Streaming</button>
     <button id="stopButton">Stop Streaming</button>
     <div id="chart"></div>
@@ -19,6 +29,7 @@
     <p id="db">Loudness: </p>
     <p id="midi_pitch">Midi Pitch:  </p>
     <p id="music_note">Music Note:  </p>
+    <a href="{{ url_for('stft_endpoint') }}">View Spectogram!</a>
 
 
 
