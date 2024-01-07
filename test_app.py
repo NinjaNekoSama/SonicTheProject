@@ -1,9 +1,9 @@
 import pytest
 import time
-import pyaudio
 from audio import midi_pitch, get_note, LiveAudio
 import numpy as np
-
+from app import app, mic_feed
+import pyaudio
 
 
 # Assuming your module is in a file named your_module_name.py
@@ -72,3 +72,32 @@ def test_live_audio_start_and_stop_recording():
     assert 'music_note' in data_point
 
 
+@pytest.fixture
+def client():
+    app.config['TESTING'] = True
+    app.config['WTF_CSRF_ENABLED'] = False
+    client = app.test_client()
+    return client
+
+
+def test_audio_initialization():
+    live_audio = mic_feed
+    assert live_audio.RECORD is True
+    assert live_audio.stream is None
+    assert live_audio.tolerance == 0.8
+    assert live_audio.win_s == 4096
+    assert live_audio.hop_s == 2048
+
+
+def test_initialize_stream(client, monkeypatch, caplog):
+    live_audio = mic_feed
+    live_audio.initialize_stream()
+    assert live_audio.stream is not None
+    assert live_audio.stream.is_active()
+
+
+def test_stop_recording(client, monkeypatch, caplog):
+    live_audio = mic_feed
+    live_audio.RECORD = True
+    live_audio.stop_recording(stop_condition=True)
+    assert live_audio.stream is None

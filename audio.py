@@ -70,8 +70,11 @@ class LiveAudio:
 
     def __del__(self):
         logging.info("Closed stream object successfully")
+        if self.stream is not None:
+            self.stream.stop_stream()
+            self.stream.close()
         self.audio_object.terminate()
-        self.stream.close()
+
 
     def start_recording(self):
         self.RECORD = True
