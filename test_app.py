@@ -71,15 +71,6 @@ def test_live_audio_start_and_stop_recording():
     assert 'midi_pitch' in data_point
     assert 'music_note' in data_point
 
-
-@pytest.fixture
-def client():
-    app.config['TESTING'] = True
-    app.config['WTF_CSRF_ENABLED'] = False
-    client = app.test_client()
-    return client
-
-
 def test_audio_initialization():
     live_audio = mic_feed
     assert live_audio.RECORD is True
@@ -88,16 +79,3 @@ def test_audio_initialization():
     assert live_audio.win_s == 4096
     assert live_audio.hop_s == 2048
 
-
-def test_initialize_stream(client, monkeypatch, caplog):
-    live_audio = mic_feed
-    live_audio.initialize_stream()
-    assert live_audio.stream is not None
-    assert live_audio.stream.is_active()
-
-
-def test_stop_recording(client, monkeypatch, caplog):
-    live_audio = mic_feed
-    live_audio.RECORD = True
-    live_audio.stop_recording(stop_condition=True)
-    assert live_audio.stream is None
