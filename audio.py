@@ -3,6 +3,23 @@ import logging
 import time
 import aubio
 import numpy as np
+from scipy.signal import butter, lfilter
+
+
+def butterworth_low_pass(cuttoff: int, fs: int, data: np.array) -> np.array:
+    """
+    Applies a low pass filter on the input data
+    """
+    nyquist = 0.5 * fs
+    normal_cutoff = cuttoff / nyquist
+    b, a = butter(5, normal_cutoff, btype='low')
+    data = np.array(data, dtype=float)
+    y = lfilter(b, a, data)
+    return y.astype(str).tolist()
+
+
+def moving_average(data, window_size):
+    return np.convolve(np.array(data, dtype=float), np.ones(window_size) / window_size, mode='valid').astype(str).tolist()
 
 
 def midi_pitch(freq):
@@ -15,10 +32,10 @@ def midi_pitch(freq):
     """
     if freq <= 0:
         return 0
-    midi_pitch = 69 + 12 * np.log2(freq / 440.0)
-    if midi_pitch == -np.inf:
+    midi = 69 + 12 * np.log2(freq / 440.0)
+    if midi == -np.inf:
         return 0
-    return midi_pitch
+    return np.round(midi, 2)
 
 
 def get_note(midi):
@@ -30,7 +47,7 @@ def get_note(midi):
     octave = int((midi - 12) / 12)
     pitch = midi_diff % 12
     note_name = _names[int((pitch + 9) % len(_names))]
-    frac_cents = (midi - int(midi)) * 100
+    frac_cents = np.round((midi - int(midi)) * 100, 2)
     note_string = f"{note_name}{octave} +{frac_cents}ct"
     return note_string
 
@@ -75,7 +92,6 @@ class LiveAudio:
             self.stream.close()
         self.audio_object.terminate()
 
-
     def start_recording(self):
         self.RECORD = True
         self.initialize_stream()
@@ -88,11 +104,11 @@ class LiveAudio:
             self.rms = np.sqrt((signal ** 2).sum() / len(data))
             db = (20 * np.log10(self.rms)) + 75
             data = signal.astype(str)
-            pitch = pitch_o(signal)[0]
+            pitch = np.round(pitch_o(signal)[0], 2)
             midi_value = midi_pitch(pitch)
             music_note = get_note(midi_value)
 
-            yield {'data': data.tolist(), 'time': time.time(), 'pitch': f'{str(pitch)} Hertz', 'db': str(db),
+            yield {'data': data.tolist(), 'time': time.time(), 'pitch': f'{str(pitch)} Hertz', 'db': str(round(db, 2)),
                    'midi_pitch': str(midi_value), 'music_note': str(music_note)}
 
     def stop_recording(self, stop_condition=False):

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Spectogram I guess?</title>
+    <title>Spectrum based Noverly function</title></head>
      <style>
         h1 {
             font-family: 'ＭＳ Ｐゴシック';  /* Use an 8-bit-style font */
@@ -25,22 +25,15 @@
   }
     </style>
 <body>
-    <h1>Real time Spectogram</h1>
-   <div id="optionsContainer">
+    <h1>Real time spectral novelty function</h1>
+    <script src = "static\p5.min.js"></script>
+    <script src = "static\similarity.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/addons/p5.sound.js"></script>
+    <script src="static/plotly-2.27.0.min.js"></script>
+  <div id="optionsContainer">
     <button id="toggleButton" onclick="togglePlayPause()">Pause</button>
-  <select id="backgroundColorSelect">
-    <option value="rgb">Pink</option>
-    <option value="black">Black</option>
-    <option value="white">White</option>
-  </select>
-           <a href="{{ url_for('hello_world') }}">Back to home page!</a>
-
+    <a href="{{ url_for('hello_world') }}">Back to home page!</a>
 
 </div>
-    <script src="static\spectogram.js"></script>
-    <script src = "static\p5.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/addons/p5.sound.js"></script></head>
-
-
 </body>
 </html>
